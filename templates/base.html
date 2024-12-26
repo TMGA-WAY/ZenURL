@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title%} {% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'url_shortener.css' %}">
+    {% block css_files %} {% endblock %}
+</head>
+<body>
+<header id="main-navigation">
+    <h1>
+        <a href="">ZenURL</a>
+    </h1>
+    <nav>
+        <a href=""> My URLs</a>
+        <a href="">About</a>
+    </nav>
+
+</header>
+
+{% block content %}
+
+
+{% endblock %}
+
+</body>
+</html>
