@@ -35,7 +35,7 @@ Zen URL
 
             <button type="submit">Shorten URL</button>
         </form>
-        <textarea id="short-url" class="{% if short_url %}active{% endif %}" readonly>
+        <textarea id="short-url" class="{% if short_url %} active {% endif %}" readonly>
         {% if short_url %}
             {{ short_url }}
         {% endif %}

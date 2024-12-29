@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from django.shortcuts import redirect
 
+from zenurl.url_shortener.service.shortener_service import fetch_long_url
+
 
 # Create your views here.
 
@@ -19,4 +21,5 @@ def create_short_url(request, long_url):
 
 
 def get_long_url(request, short_url):
+    long_url = fetch_long_url(short_url=short_url, user_id=None)
     return render(request, 'url_shortener/home.html')
