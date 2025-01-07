@@ -6,15 +6,16 @@ from ..models import Url
 def save_short_url(long_url: str, user_id: str = None, is_public: bool = True) -> str:
     try:
         # TODO: First check the long_url is present or not, if user_id is there, then filter with user id
+        print("inside save_short_url")
         fetched_url = _find_url(url=long_url, user_id=user_id, is_long_url=True)
-
+        print("fetched_url", fetched_url)
         if fetched_url != any({'404', '401'}):
             return fetched_url
 
         # Generate Snowflake ID
         snowflake_id_generator = SnowflakeIdGenerator()
         snowflake_id = snowflake_id_generator.next_id(datacenter_id=1, machine_id=1)
-
+        print("snowflake_id", snowflake_id)
         if not snowflake_id:
             return _exception_message()
 
@@ -22,12 +23,14 @@ def save_short_url(long_url: str, user_id: str = None, is_public: bool = True) -
         base62_string = Base62Encoder(snowflake_id=snowflake_id)
         if not base62_string:
             return _exception_message()
-
+        print("base62_string", base62_string)
         # TODO: Call models to store the value
-        saved = False
-        # saved = # Store it in model
-        if not saved:
-            _exception_message()
+        url = Url.objects.create(short_url=str(base62_string),
+                                 long_url=long_url,
+                                 user_id=user_id,
+                                 is_public=is_public)
+
+        url.save()
         return str(base62_string)
 
     except Exception as e:
