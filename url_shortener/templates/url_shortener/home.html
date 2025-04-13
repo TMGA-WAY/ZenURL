@@ -13,35 +13,6 @@ Zen URL
 {% endblock %}
 
 {% block content %}
-<div class="card">
-
-
-    <section id="welcome">
-        <header>
-            <h2>Enter Your Long URL</h2>
-        </header>
-        <form id="url-form" action="{% url 'create_short_url' %}" method="POST">
-            {% csrf_token %}
-            <input type="text" name="long_url" placeholder="Paste your long URL here..." required/>
-
-            <!-- Date and Time Picker -->
-            <div class="schedule-container">
-                <label for="schedule-date">Schedule Date and Time:</label>
-                <div class="date-time-picker">
-                    <input type="date" id="schedule-date" name="schedule_date"/>
-                    <input type="time" id="schedule-time" name="schedule_time"/>
-                </div>
-            </div>
-
-            <button type="submit">Shorten URL</button>
-        </form>
-        <textarea id="short-url" class="{% if short_url %} active {% endif %}" readonly>
-        {% if short_url %}
-            {{ short_url }}
-        {% endif %}
-    </textarea>
-    </section>
-</div>
 
 
 {% endblock %}

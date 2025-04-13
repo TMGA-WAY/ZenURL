@@ -1,30 +1,32 @@
+import json
+
 from django.shortcuts import render
-from django.shortcuts import redirect
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
+from django.views import View
+from django.http import JsonResponse
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+
+from .schema.long_url_serializer import LongUrlSerializer
+from .service import url_shortner_service
 
 
-from .service import shortener_service
-
-
-# Create your views here.
-
-def home(request):
-    return render(request, 'url_shortener/home.html')
-
-
-def redirect_original(request, short_url):
-    long_url = shortener_service.fetch_url(url=short_url, user_id=None, is_long=False)
-    if long_url is not "PROPER":  # TODO: Implement the check
+class HomeView(View):
+    def get(self, request):
+        # TODO: Include Other features
         return render(request, 'url_shortener/home.html')
-    return redirect(long_url)
 
 
-def create_short_url(request):
-    long_url = request.POST.get('long_url')
-    print("Long URL: ", long_url)
-    short_url = shortener_service.save_short_url(long_url=long_url, user_id=None, is_public=True)
-    return render(request, 'url_shortener/home.html')
+class ShortenUrlView(APIView):
+    def post(self, request):
+        payload = LongUrlSerializer(data=request.data)
 
+        if not payload.is_valid():
+            return Response(payload.errors, status=status.HTTP_400_BAD_REQUEST)
 
-def get_long_url(request, short_url):
-    long_url = shortener_service.fetch_url(url=short_url, user_id=None, is_long=False)
-    return render(request, 'url_shortener/home.html')
+        res = url_shortner_service.create_short_url(payload.validated_data["url"])
+
+        return Response(res, status=status.HTTP_201_CREATED)

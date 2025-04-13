@@ -1,20 +1,21 @@
-from collections import deque
-
-CHARS = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+BASE64_URL_ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_+"
 
 
-class Base62Encoder:
-    def __init__(self, snowflake_id):
-        self.id = snowflake_id
+class Base64Generator:
 
-    def get_base64_string(self) -> str | None:
-        try:
-            base64 = deque()
-            while self.id:
-                self.id, rem = divmod(self.id, 62)
-                base64.appendleft(CHARS[rem])
+    def base64_generator(self, url_id):
+        if url_id == 0:
+            yield BASE64_URL_ALPHABET[0]
+        else:
+            while url_id > 0:
+                url_id, rem = divmod(url_id, 64)
+                yield BASE64_URL_ALPHABET[rem]
 
-            return ''.join(base64)
-        except Exception as e:
-            print("Exception in Base64 \t", e)
-            return None
+    def encode(self, url_id) -> str:
+        return ''.join(self.base64_generator(url_id))[::-1]
+
+    def decode(self, short_url: str) -> int:
+        base_id = 0
+        for char in short_url:
+            base_id = base_id * 64 + BASE64_URL_ALPHABET.index(char)
+        return base_id
