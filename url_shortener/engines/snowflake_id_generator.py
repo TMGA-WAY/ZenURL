@@ -11,7 +11,7 @@ class SnowflakeIdGenerator:
         self.lock = threading.Lock()
 
     def _current_time_millis(self):
-        return int(time.time() * 1000)
+        return int(time.time())
 
     def _wait_next_millis(self, last_timestamp):
         timestamp = self._current_time_millis()

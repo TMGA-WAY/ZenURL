@@ -6,6 +6,7 @@ class LongUrlSerializer(serializers.Serializer):
     Serializer for the long URL.
     """
     url = serializers.CharField(max_length=2000, required=True)
+    extra_small = serializers.BooleanField(default=False, required=False)
 
     def validate_long_url(self, value):
         """
